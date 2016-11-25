@@ -1,0 +1,354 @@
+/*@import url(//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,greek-ext,vietnamese);*/
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	color: #666666;
+	text-rendering: optimizeLegibility;
+	/*background: #f9f9f9;*/
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;
+}
+
+.page-header {
+	vertical-align: middle;
+	margin: 15px 0;
+	padding: 0;
+	border-bottom: none;
+}
+.page-header h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 30px;
+	color: #848484;
+	display: inline-block;
+	margin-bottom: 15px;
+}
+
+a:hover, a:focus {
+	text-decoration: none;
+}
+/* fix for bootstrap hidden and visible */
+span.hidden-xs, span.hidden-sm, span.hidden-md, span.hidden-lg {
+	display: inline;
+}
+#container {
+	min-height: 100%;
+	width: 100%;
+	position: relative;
+}
+.container-fluid {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+#header {
+	min-height: 0px;
+	background: #FFFFFF;
+	border-bottom: 1px solid #E5E5E5;
+	margin: 0;
+	padding: 0;
+}
+#header .nav > li {
+	float: left;
+}
+#header .nav > li li {
+	min-width: 200px;
+}
+#header .navbar-header {
+	min-height: 0px;
+	padding: 0;
+}
+/* Mobile */
+@media (max-width: 767px) {
+#header .navbar-header {
+	margin-right: 0px;
+	margin-left: 0px;
+	float: left;
+}
+}
+#header #button-menu + .navbar-brand {
+	padding: 10px 10px 10px 10px;
+	margin-right: 10px;
+	height: auto;
+}
+#header .nav > li > a {
+	padding: 3px 16px;
+	line-height: 38px;
+	cursor: pointer;
+	color: #6D6D6D;
+	border-left: 1px solid #E1E1E1;
+}
+#header .nav > li > a > .label {
+	text-shadow: none;
+	padding: 1px 4px;
+	position: absolute;
+	top: 8px;
+	left: 6px;
+}
+#button-menu {
+	padding: 10px 17px 9px 17px;
+	line-height: 25px;
+	float: left;
+	display: inline-block;
+	cursor: pointer;
+	color: #6D6D6D;
+	border-right: 1px solid #E1E1E1;
+}
+#profile {
+	display: none;
+}
+#column-left.active #profile {
+	display: block;
+	padding: 10px 15px 10px 15px;
+	overflow: auto;
+	border-bottom: 1px solid #585858;
+}
+#profile div {
+	float: left;
+	color: #C4C4C4;
+}
+#profile div i {
+	font-size: 42px;
+	color: #2ca5d3;
+}
+#profile div + div {
+	margin-left: 15px;
+}
+#profile h4 {
+	margin-top: 6px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	color: #FFF;
+	margin-bottom: 0;
+}
+#column-left {
+	width: 50px;
+	height: 100%;
+	background-color: #515151;
+	position: absolute;
+	top: 0px;
+	padding-top: 50px;
+	z-index: 10;
+	transition: all 0.3s;
+}
+#column-left.active {
+	width: 235px;
+	display: block;
+}
+
+#content {
+	padding-bottom: 40px;
+	transition: all 0.3s;
+}
+#column-left + #content {
+	margin-left: 50px;
+}
+#column-left + #content + #footer {
+	margin-left: 50px;
+}
+/* Mobile */
+@media (max-width: 767px) {
+#column-left {
+	overflow: hidden;
+	display: none;
+}
+#column-left + #content {
+	margin-left: 0;
+}
+#column-left + #content + #footer {
+	margin-left: 0;
+}
+}
+
+/* Menu */
+#menu, #menu ul, #menu li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+#menu {
+	margin-bottom: 25px;
+}
+#menu > li {
+	position: relative;
+}
+#menu li a {
+	text-decoration: none;
+	display: block;
+	padding: 10px;
+	cursor: pointer;
+	border-bottom: 1px solid #515151;
+}
+#menu li a i {
+	font-size: 16px;
+}
+#menu > li > a {
+	color: #C4C4C4;
+	font-size: 14px;
+	padding-left: 13px;
+	border-bottom: 1px solid #585858;
+}
+#menu > li > a:hover {
+	background-color: #444444;
+}
+#menu > li > a > span {
+	display: none;
+	margin-left: 8px;
+}
+#menu li li a {
+	color: #9d9d9d;
+}
+#menu li li a:hover {
+	color: #FFFFFF;
+	background-color: #373737;
+}
+#menu li li a:before {
+	content: "\f101";
+	font-size: 14px;
+	font-family: FontAwesome;
+	margin-left: 10px;
+	margin-right: 10px;
+	transition: margin ease 0.5s;
+}
+#menu li li a:hover:before {
+	margin-right: 20px;
+}
+#menu > li.active > a {
+	color: #DDDDDD;
+	background: #373737;
+}
+#menu li.active li a {
+	color: #C4C4C4;
+}
+#menu li li.active > a:last-child {
+	color: #FFFFFF;
+}
+#menu li li.active a:last-child:before {
+	margin-left: 20px;
+	margin-right: 10px;
+}
+
+#menu > li > ul {
+	position: absolute;
+	left: 50px;
+	top: 0px;
+	width: 210px;
+	background-color: #444444;
+	visibility: hidden;
+}
+#menu li ul {
+	overflow: hidden;
+}
+#menu > li:hover > ul {
+	visibility: visible;
+}
+#menu li li a.parent:after, #column-left.active #menu > li a.parent:after {
+	font-family: FontAwesome;
+	content: "\f105";
+	float: right;
+	margin-right: 8px;
+}
+#menu li li.open > a.parent:after, #column-left.active #menu > li.open > a.parent:after, #column-left.active #menu > li li.open > a.parent:after {
+	font-family: FontAwesome;
+	content: "\f107";
+	float: right;
+	margin-right: 8px;
+}
+
+
+#menu li ul a {
+	padding-left: 20px;
+}
+#menu li li ul a {
+	padding-left: 40px;
+}
+#menu li li li ul a {
+	padding-left: 60px;
+}
+#menu li li li li ul a {
+	padding-left: 80px;
+}
+
+/* Menu Active */
+/* Desktop */
+@media (min-width: 768px) {
+#column-left.active {
+	overflow: auto;
+}
+#column-left.active + #content {
+	margin-left: 235px;
+}
+#column-left.active + #content + #footer {
+	margin-left: 235px;
+}
+}
+/* Mobile */
+@media (max-width: 767px) {
+#column-left.active + #content {
+	position: relative;
+	left: 235px;
+}
+#column-left.active + #content + #footer {
+	position: relative;
+	left: 235px;
+}
+}
+#column-left.active {
+	width: 235px;
+}
+#column-left.active #menu li i {
+	font-size: 14px;
+}
+#column-left.active #menu > li > a > span {
+	display: inline;
+}
+#column-left.active #menu > li > ul {
+	position: relative;
+	left: auto;
+	top: auto;
+	width: auto;
+	visibility: visible;
+}
+/* footer */
+#footer {
+	height: 100px;
+	text-align: center;
+}
+
+/*bikin dashboard tile pake bootstrap dan tambahan css nya dibawah ini */
+.tile .tile-body i {
+    font-size: 50px;
+    opacity: 0.3;
+    transition: all 1s;
+}
+.tile a{
+    color: #FFFFFF;
+}
+
+.tile{
+    margin-bottom: 15px;
+    border-radius: 3px;
+    background-color: #279FE0;
+    color: #FFFFFF;
+    transition: all 1s;
+}
+.tile-heading {
+    padding: 5px 8px;
+    text-transform: uppercase;
+    background-color: #1E91CF;
+    color: #FFF;
+}
+.tile-body {
+    padding: 15px;
+    color: #FFFFFF;
+    line-height: 48px;
+}
+.tile-footer {
+    padding: 5px 8px;
+    background-color: #3DA9E3;
+}
+/*----------------------------------*/

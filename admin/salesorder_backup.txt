@@ -1,0 +1,432 @@
+<?php
+define('PATH', './');
+$show_menu = true;
+$GLOBALS['title'] = 'Customers';
+$pagename = basename($_SERVER['PHP_SELF']);
+
+require_once PATH.'libs/header.php';
+?>
+<script>	
+$(document).ready(function() {
+	    
+    $('#table_view4').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": "data/data_sales_order_header.php",
+		"columnDefs": [
+			{
+				"targets": [ 4 ],
+				"visible": false,
+				"searchable": false
+			},]
+
+    } );
+	<?php 	
+	if(!empty($_GET['id']))
+		{?>
+		
+    $('#table_view').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": {	"type":'POST',
+					"url":"data/data_salesorder.php",
+		"data": {                       
+                noorder: '<?php echo $_GET["id"] ?>', 
+				}
+		}
+    } );
+	<?php } ?>
+		
+    var table = $('#table_view4').DataTable();
+	
+	$('#table_view4 tbody').on( 'click', 'tr', function() {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+			
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');	
+        }
+		
+    } );
+	
+	$("#table_view4 tbody").on('dblclick','td',function(){
+		var data = table.row( $(this).parents('tr') ).data();
+		var data1=data[1];
+		$.ajax({		
+                        type: "post",
+                        data: data1,
+						success: function () {
+						window.location = "salesorder.php?id="+data1;
+						}
+                    });
+    });
+	
+	$('#insert').click( function () {
+		$('#formfield').css('display','block');
+		$('#tableshow').css('display','none');
+		document.getElementById("id_act").value='1';
+        document.getElementById("title_modal").innerHTML="Masukan Data";
+		document.getElementById("myForm").reset();
+    } );
+	
+	$('#backbutton').click( function () {
+		$('#formfield').css('display','none');
+		$('#tableshow').css('display','block');
+    } );
+	/* 
+	//coba button parsing nilai ke diri sendiri
+	 $("#btn").click(function() {
+        var val = "Hi";
+        $.ajax ({
+            url: "ajax.php",
+            data: { val : val },
+            success: function( result ) {
+                alert("Hi, testing");
+                alert( result );
+            }
+        });
+    });*/
+	$('#edit').click( function () {
+			
+			var datates= table.row('.selected').data() ;
+			var datatesnew=datates.toString().split(",");
+			
+			document.getElementById("title_modal").innerHTML="Ubah Data "+datatesnew[1];
+			document.getElementById("id_act").value='2';
+			document.getElementById("sales_order_header_id").value=datatesnew[0];
+			
+			document.getElementById("tglorder").value=datatesnew[2];
+			document.getElementById("tglorder").readOnly = true;
+			document.getElementById("m_customer_id").value=datatesnew[4];
+			document.getElementById("m_customer_id").readOnly = true;
+			$('#formfield').css('display','block');
+			$('#tableshow').css('display','none');
+			
+    } );
+	
+	/*	$('#edit').click( function () {
+	
+			var datates= table.row('.selected').data() ;
+			var datatesnew=datates.toString().split(",");
+			document.getElementById("title_modal1").innerHTML="Ubah Data";
+			document.getElementById("id_act1").value='2';
+			document.getElementById("sales_order_header_id1").value=datatesnew[0];
+			document.getElementById("noorder1").value=datatesnew[1];
+			document.getElementById("noorder1").readOnly = true;
+			
+			document.getElementById("tglorder1").value=datatesnew[2];
+			document.getElementById("tglorder1").readOnly = true;
+			document.getElementById("customer1").value=datatesnew[4];
+			
+			document.getElementById("customer_name").value = datatesnew[3];
+			document.getElementById("customer_name").readOnly = true;
+			
+			document.getElementById("kodeitem").value=datatesnew[5];
+			
+			document.getElementById("qty").value=datatesnew[6];
+			document.getElementById("hargajual").value=datatesnew[7];
+			document.getElementById("total").value=datatesnew[8];
+			$('#ModalEdit').modal('show');
+    } );*/
+	
+	$('#delete').click( function () {
+        var datates= table.row('.selected').data() ;
+		var datatesnew=datates.toString().split(",");
+		var id=datatesnew[0];
+		var no_order=datatesnew[1];
+		//alert("'m_customer_id':'"+ id +"','id_act':'3'");
+		var del={"sales_order_header_id": id , "id_act": '3',"no_order":no_order} 
+		$.ajax({
+                        url: "salesorder_process.php",
+                        type: "post",
+                        data: del,
+                        success: function () {
+							window.location = "salesorder.php";
+						}
+                    });
+		
+	} );
+	
+	
+	
+	/*$("#myForm").submit(function(e) {
+
+    var url = "salesorder_process.php"; // the script where you handle the form input.
+	var formData=new FormData($(this)[0]);
+    $.ajax({
+           type: "POST",
+           url: url,
+		   contentType: false,
+		   processData: false,
+           data: formData, // serializes the form's elements.           
+		   success: function () {
+							window.location = "salesorder.php";
+						}
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+});*/
+	
+} );
+
+	function getValue(val,tableID,rowInd)
+		{	
+			var table = document.getElementById(tableID);
+			var tr=table.getElementsByTagName('tr')[rowInd.rowIndex];
+			var td=tr.getElementsByTagName('td')[2];
+			var input=td.getElementsByTagName('input')[0];
+			if(val !== "")
+			{
+			
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				  input.value=
+				  this.responseText;
+				}
+			 };
+			xhttp.open("GET", "priceproduct.php?id=" +val, true);
+			xhttp.send();
+			}
+			else{
+				input.value="";
+			}
+		}
+		function total(qty,tableID,rowInd)
+		{
+			var table = document.getElementById(tableID);
+			var tr=table.getElementsByTagName('tr')[rowInd.rowIndex];
+			var td=tr.getElementsByTagName('td')[2];
+			var harga=td.getElementsByTagName('input')[0].value;
+			var td=tr.getElementsByTagName('td')[3];
+			var tot=td.getElementsByTagName('input')[0].value=qty*harga;
+			
+		}
+		function addRow(tableID) {
+				var table = document.getElementById(tableID);
+				var rowCount = table.rows.length;
+				var row = table.insertRow(rowCount);
+				var colCount = table.rows[0].cells.length;
+				
+				for(var i=0; i <colCount; i++) {
+					var newcell = row.insertCell(i);
+					newcell.innerHTML = table.rows[1].cells[i].innerHTML;
+					}
+			}
+			function del(tableID,rowInd)
+			{
+				var table = document.getElementById(tableID);
+				var tr=table.getElementsByTagName('tr')[rowInd.rowIndex];
+				var td=tr.getElementsByTagName('td')[2];
+				var rowCount = table.rows.length;
+				if(rowCount!='2')
+					table.deleteRow(rowInd.rowIndex);
+				
+			}
+	
+</script>
+
+
+<?php
+	$con=mysqli_connect("localhost","root","","bhagavagallery");
+	if (mysqli_connect_errno())
+	{
+	echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
+
+?>
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="pull-right">
+            <button type="button" class="fa fa-plus btn btn-primary btn-lg" id="insert"></button>
+			<button type="button" class="fa fa-pencil btn btn-success btn-lg"  id="edit"></button>
+            <button type="button" class="btn btn-danger"id="delete"><i class="fa fa-trash"></i></button>
+		</div>
+			<h1><i class="fa fa-truck"></i> Sales Order</h1>
+			
+    </div>
+</div>	
+<!-- Form -->
+  <div class="container-fluid" id="formfield" style="display:none">
+      <!-- Form content-->
+        	<h4 id="title_modal" class="modal-title">Masukan Data </h4>
+	  </br>
+	  <div class="modal-body">
+		  <form class="form-horizontal" id="myForm" action="salesorder_process.php" method="post">
+			<input type="hidden" value="" name="sales_order_header_id" id="sales_order_header_id">
+			<input type="hidden" value="" name="id_act" id="id_act">
+			<div class="form-group">
+			  <label class="control-label col-sm-2" for="tglorder">Tgl Order:</label>
+			  <div class="col-sm-10"> 
+				<input type="date" class="form-control" required id="tglorder" placeholder="mm/dd/yyyy" name="tglorder">
+			  </div>
+			</div>
+			  <div class="form-group">					
+				<label class="control-label col-sm-2" for="email">Nama Customer:</label>
+				<div class="col-sm-10">
+				<?php
+				
+				//nama customer
+						$sqlcust	="select m_customer_id,nama from m_customer  order by nama asc ";
+						$rescust	= mysqli_query($con,$sqlcust);
+						$checkcust	= mysqli_num_rows($rescust);
+						?>
+						<select class="form-control"id="m_customer_id" placeholder="Enter Customer Name"name="m_customer_id" required>
+								<option value="">Pilih Customer</option>
+								<?php
+								while($rowcust=mysqli_fetch_array($rescust)){
+									?>
+									<option value="<?php echo $rowcust['m_customer_id']?>"><?php echo $rowcust['nama']?></option>
+									<?php
+								}
+								?>
+							</select>
+				</div>
+			  </div>
+				
+
+		<!-- Input Detail-->
+		<p> 
+		  <button type="button" value="Add Item" onClick="addRow('dataTable')" class="fa fa-plus btn btn-primary btn-lg" ></button> 
+		  
+		  <p>(All acions apply only to entries with check marked check boxes only.)</p>
+		</p>
+						
+		<table id="dataTable" class="table table-bordered" border="1" >
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Quantity</th>
+				<th>Harga</th>
+				<th>Total</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		 <tbody>
+		  <tr>
+			<p>
+			<td >
+							<?php
+					
+					//nama customer->product
+							$sqlcust	="select m_product_id,product_name,harga_jual from m_product order by product_name asc ";
+							$rescust	= mysqli_query($con,$sqlcust);
+							?>
+							<select class="form-control"id="m_product_id[]" placeholder="Enter Product"name="m_product_id[]" required style="width:100%" onchange="getValue(this.value,'dataTable',this.parentElement.parentElement)" >
+									<option value="">Pilih Product</option>
+									<?php
+									while($rowcust=mysqli_fetch_array($rescust)){
+										?>
+										<option value="<?php echo $rowcust['m_product_id']?>"><?php echo $rowcust['product_name']?></option>
+										<?php
+									}
+									?>
+								</select>
+
+			</td>
+			<td>
+				<input type="number" class="form-control"name="qty[]" id='qty[]'style="width:100%"min="1" onchange="total(this.value,'dataTable',this.parentElement.parentElement)"required>
+				
+			</td>
+			<td>
+				
+				<input type="text" class="form-control"  name="price[]" id="price[]" style="width:100%" readonly required>
+			</td>
+			<td>
+				<input type="text" class="form-control" name="total[]" id="total[]" style="width:100%" readonly required>
+			</td>
+			<td >
+				<button type="button" class="btn btn-danger" onclick="del('dataTable',this.parentElement.parentElement)"><i class="fa fa-trash"></i></button>
+			</td>
+			</p>
+		  </tr>
+		  
+		 </tbody>
+		</table>
+			<!-- end of table input-->
+			
+			<div class="form-group"> 
+				  <div class=" col-sm-7">
+					<button type="submit" class="btn btn-default">Submit</button>
+				  </div>
+				</div>
+			</form>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="backbutton">Close</button>
+        </div>
+      
+  </div>
+	
+        
+</div>
+<div class="container-fluid" id="tableshow">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-list"></i> Order List</h3></div>
+        <div class="panel-body"style="overflow-x:auto;">
+		<?php
+			if(!empty($_GET['id']))
+			{
+			$noorder=$_GET['id'];	
+			$sql="SELECT * from sales_order_header as soh left join m_customer as cus on soh.customer=cus.m_customer_id  where soh.no_order='$noorder'";
+			$rs=mysqli_query($con,$sql) or die(mysql_error());
+			$rowview=mysqli_fetch_array($rs);
+			$nama=$rowview['nama'];
+			$tglorder=$rowview['tgl_order'];
+			
+			echo '
+		  <form class="form-horizontal" id="myForm" action="salesorder_process.php" method="post">
+				<div class="form-group">
+				  <label class="control-label col-sm-2" for="tglorder">Tgl Order:</label>
+				  <div class="col-sm-10"> 
+					<input type="date" class="form-control" required id="tglorder" placeholder="mm/dd/yyyy" name="tglorder" value='.$tglorder.' readonly>
+				  </div>
+				</div>
+				<div class="form-group">
+				  <label class="control-label col-sm-2" for="tglorder">Nama Customer:</label>
+				  <div class="col-sm-10"> 
+					 <input type="text" class="form-control" id="nama" placeholder="Enter Customer Name"name="nama"required readonly value='.$nama.'>
+				  </div>
+				</div>
+				<table id="table_view" class="table table-striped table-bordered display" cellspacing="0" width="100%" height="auto" >
+					<thead>
+							<tr>
+								<th>Sales Order Detail</th>
+								<th>No Order</th>
+								<th>Nama Produk</th>
+								<th>Kuantitas</th>
+								<th>Harga Jual</th>
+								<th>Total</th>
+							</tr>
+					</thead>
+					<tfoot>
+					</tfoot>
+				</table>
+				';
+			}
+		else{
+		?>
+		<table id="table_view4" class="table table-striped table-bordered display" cellspacing="0" width="100%" height="auto" >
+			<thead>
+					<tr>
+						<th>Sales Order No</th>
+						<th>No Order</th>
+						<th>Tgl Order</th>
+						<th>Customer</th>
+						<th>Customer ID</th>
+					</tr>
+			</thead>
+			<tfoot>
+			</tfoot>
+		</table>
+		<?php } ?>
+        </div>
+    </div>
+</div>
+
+
+<?php
+require_once PATH.'libs/footer.php';
+?>

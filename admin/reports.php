@@ -1,0 +1,34 @@
+<?php
+define('PATH', './');
+$show_menu = true;
+$GLOBALS['title'] = 'Customers';
+$pagename = basename($_SERVER['PHP_SELF']);
+
+require_once PATH.'libs/header.php';
+?>
+<script>
+	$(document).ready(function(){
+		$('#table_view').datatable();
+	});
+</script>
+
+<div class="page-header">
+    <div class="container-fluid">
+        
+        <h1><i class="fa fa-bar-chart"></i> Reports</h1>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-list"></i> Reporting</h3></div>
+        <div class="panel-body"style="overflow-x:auto;">
+		<table id="table_view" class="table table-striped table-bordered display" cellspacing="0" width="100%" height="auto" ></table>
+            <!--<table id="table_view"></table>-->
+        </div>
+    </div>
+</div>
+
+
+<?php
+require_once PATH.'libs/footer.php';
+?>
